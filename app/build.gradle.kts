@@ -21,12 +21,30 @@ android {
     }
 
     buildTypes {
+
+        debug{
+            isDebuggable = true
+            applicationIdSuffix = ".debug"
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            resValue("string", "app_name", "Shopentic Debug")
+
+            buildConfigField("String", "BASE_URL","\"https://api.escuelajs.co/api/v1/\"")
+
+        }
+
         release {
+            isDebuggable = false
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "BASE_URL","\"https://api.escuelajs.co/api/v1/\"")
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -37,6 +55,7 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -64,6 +83,12 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+
+    // Retrofit & Converter
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+// OkHttp (optional but recommended for logging)
+    implementation(libs.logging.interceptor)
 }
 
 // Allow references to generated code
